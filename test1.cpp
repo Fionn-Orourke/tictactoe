@@ -2,8 +2,8 @@
 #include <stdio.h>
 
 //Screen dimension constants
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 640;
+const int SCREEN_WIDTH = 600;
+const int SCREEN_HEIGHT = 600;
 
 int main(int argc, char* args[])
 {
@@ -31,19 +31,27 @@ int main(int argc, char* args[])
             //Get window surface
             screenSurface = SDL_GetWindowSurface(window);
 
-            //Fill the surface white
+            //Fill the surface colour
             SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0x11, 0x31, 0xa1));
 
-            //Draw two parallel lines in the middle of the window
-            SDL_Rect line1 = { SCREEN_WIDTH / 4 - 50, SCREEN_HEIGHT / 2, 100, 2 };
-            SDL_Rect line2 = { SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 10, 2, 100 };
+
+            // Vertical lines
+            SDL_Rect line1 = { (SCREEN_WIDTH / 8)*3 , (SCREEN_HEIGHT / 4), 2, 300};
+            SDL_Rect line2 = { (SCREEN_WIDTH / 8)*5, (SCREEN_HEIGHT / 4), 2, 300};
             SDL_FillRect(screenSurface, &line1, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line2, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+
+            // Horizontal lines
+            SDL_Rect line3 = { SCREEN_WIDTH / 4, (SCREEN_HEIGHT / 8) * 3, 300, 2 };
+            SDL_Rect line4 = { SCREEN_WIDTH / 4, (SCREEN_HEIGHT / 8) * 5, 300, 2 };
+            SDL_FillRect(screenSurface, &line3, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+            SDL_FillRect(screenSurface, &line4, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+
 
             //Update the surface
             SDL_UpdateWindowSurface(window);
 
-            //Hack to get window to stay up
+            //get window to stay up
             SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }
         }
 
