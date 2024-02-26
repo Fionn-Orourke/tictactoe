@@ -7,6 +7,8 @@ const int SCREEN_HEIGHT = 600;
 
 int main(int argc, char* args[])
 {
+    Uint32 buttons;
+    int x, y;
     //The window we'll be rendering to
     SDL_Window* window = NULL;
 
@@ -36,23 +38,30 @@ int main(int argc, char* args[])
 
 
             // Vertical lines
-            SDL_Rect line1 = { (SCREEN_WIDTH / 8)*3 , (SCREEN_HEIGHT / 4), 2, 300};
-            SDL_Rect line2 = { (SCREEN_WIDTH / 8)*5, (SCREEN_HEIGHT / 4), 2, 300};
+            SDL_Rect line1 = { (SCREEN_WIDTH / 10)*3 , (SCREEN_HEIGHT / 6), 2, 300};
+            SDL_Rect line2 = { (SCREEN_WIDTH / 10)*5, (SCREEN_HEIGHT / 6), 2, 300};
             SDL_FillRect(screenSurface, &line1, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line2, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
             // Horizontal lines
-            SDL_Rect line3 = { SCREEN_WIDTH / 4, (SCREEN_HEIGHT / 8) * 3, 300, 2 };
-            SDL_Rect line4 = { SCREEN_WIDTH / 4, (SCREEN_HEIGHT / 8) * 5, 300, 2 };
+            SDL_Rect line3 = { SCREEN_WIDTH / 6, (SCREEN_HEIGHT / 10) * 3, 300, 2 };
+            SDL_Rect line4 = { SCREEN_WIDTH / 6, (SCREEN_HEIGHT / 10) * 5, 300, 2 };
             SDL_FillRect(screenSurface, &line3, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line4, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
+            while (true) {
+                Uint32 buttons = SDL_GetMouseState(&x, &y);
+                printf_s("%d, %d", x, y);
 
-            //Update the surface
-            SDL_UpdateWindowSurface(window);
 
-            //get window to stay up
-            SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }
+                            //Update the surface
+                SDL_UpdateWindowSurface(window);
+
+                            //get window to stay up
+                SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }
+            }
+
+            
         }
 
     }
