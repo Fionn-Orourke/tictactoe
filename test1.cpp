@@ -1,10 +1,11 @@
 #include <SDL.h>
-#include <stdio.h>
 
+#include <stdio.h>
+//#include "SDL_TTF.h"
 //Screen dimension constants
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
-
+//TTF_Font* font = TTF_OpenFont("ARIAL.TTF", size);
 int box(int , int );
 int i, j, count1, count2;
 char prev = 'o';
@@ -25,19 +26,6 @@ bool checkWin(char grid[3][3], char value) {
     }
     return false;
 }
-
-
-
-void drawX(SDL_Renderer* renderer, int x, int y, int size) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-    // Draw the first diagonal line (from top-left to bottom-right)
-    SDL_RenderDrawLine(renderer, x - size, y - size, x + size, y + size);
-
-    // Draw the second diagonal line (from top-right to bottom-left)
-    SDL_RenderDrawLine(renderer, x + size, y - size, x - size, y + size);
-}
-
 
 
 int main(int argc, char* args[])
@@ -87,6 +75,8 @@ int main(int argc, char* args[])
             SDL_Rect line4 = { SCREEN_WIDTH / 6, (SCREEN_HEIGHT / 10) * 5, 300, 4 };
             SDL_FillRect(screenSurface, &line3, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line4, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+            
+            
 
             //SDL_Renderer *renderer = SDL_CreateRenderer(window, SCREEN_WIDTH, SCREEN_HEIGHT);
             //SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255);
@@ -109,20 +99,26 @@ int main(int argc, char* args[])
                     Uint32 buttons = SDL_GetMouseState(&x, &y);
                     
                     //printf_s("%i", box(x, y));
-                    if (box(x, y) <= 3) {
-                        i = 0;
-                        j = box(x, y) - 1;
-                    }
-                    else if (box(x, y) <= 6) {
-                        i = 1;
-                        j = box(x, y)-4;
-                    }
-                    else if (box(x, y) <= 9) {
-                        i = 2;
-                        j = box(x, y) -7;
-                    }
-                    else
+                    if (box(x,y) == 0)
                         printf_s("incorrect input");
+                    else
+                    {
+                        if (box(x, y) <= 3) {
+                            i = 0;
+                            j = box(x, y) - 1;
+                        }
+                        else if (box(x, y) <= 6) {
+                            i = 1;
+                            j = box(x, y)-4;
+                        }
+                        else if (box(x, y) <= 9) {
+                            i = 2;
+                            j = box(x, y) -7;
+                        }
+                        else
+                            printf_s("incorrect input");
+                    }
+                    
                     
                     //printf_s("[%i][%i]", x, y);
                     if (grid[i][j] == 'x' || grid[i][j] == 'o')
@@ -144,16 +140,22 @@ int main(int argc, char* args[])
                         }
                     
                         }
-                    int xbox = 117, xmin = 88;
-                    int ybox = 108, ymin = 109;
-                    SDL_Rect box = { (xmin)+(j*xbox)  , (ymin) + (i * ybox), 50, 50};
-                    if (prev == 'x')
-                        SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
-                    else
-                        SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
+                    if (box(x,y) == 0)
+                        printf_s("incorrect input");
+                    else if (grid[i][j] == 'x' || grid[i][j] == 'o')
+                    {
+                        int xbox = 117, xmin = 88;
+                        int ybox = 108, ymin = 109;
+                        SDL_Rect box = { (xmin)+(j*xbox)  , (ymin) + (i * ybox), 50, 50};
+                        if (prev == 'x')
+                            SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
+                        else
+                            SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
                     
-                    if (checkWin(grid, prev)) {
-                        printf("Player %c wins!\n", prev);
+                        if (checkWin(grid, prev)) {
+                            printf("Player %c wins!\n", prev);
+                    }
+                    
                         
                     }
                     }
