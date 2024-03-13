@@ -1,42 +1,54 @@
 #include <SDL.h>
 #include <stdio.h>
 
+
+
 //Screen dimension constants
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 600;
+
+int xbox = 117, xmin = 88;
+int ybox = 108, ymin = 109;
 
 int box(int , int );
 int i, j, count1, count2;
 char prev = 'o';
 
+
 // Function to check if there is a winner
-bool checkWin(char grid[3][3], char value) {
+/*bool checkWin(char grid[3][3], char value) {
     // Check rows and columns
-    for (int i = 0; i < 3; ++i) {
-        if ((grid[i][0] == value && grid[i][1] == value && grid[i][2] == value) ||
-            (grid[0][i] == value && grid[1][i] == value && grid[2][i] == value)) {
+    SDL_Surface* screenSurface = NULL;
+
+    for (int p = 0; p < 3; ++p) {
+        if ((grid[p][0] == value && grid[p][1] == value && grid[p][2] == value) ||
+            (grid[0][p] == value && grid[1][p] == value && grid[2][p] == value)) {
             return true;
         }
     }
     // Check diagonals
-    if ((grid[0][0] == value && grid[1][1] == value && grid[2][2] == value) ||
-        (grid[0][2] == value && grid[1][1] == value && grid[2][0] == value)) {
+    if ((grid[0][0] == value && grid[1][1] == value && grid[2][2] == value)) {
+        return true;
+    }
+
+    if (grid[0][2] == value && grid[1][1] == value && grid[2][0] == value) {
+        SDL_Rect box1 = { (xmin)+(0 * xbox)  , (ymin)+(2 * ybox), 50, 50 };
+        SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+        SDL_Rect box2 = { (xmin)+(1 * xbox)  , (ymin)+(1 * ybox), 50, 50 };
+        SDL_FillRect(screenSurface, &box2, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+        SDL_Rect box3 = { (xmin)+(2 * xbox)  , (ymin)+(0 * ybox), 50, 50 };
+        SDL_FillRect(screenSurface, &box3, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+        //SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
+
+
         return true;
     }
     return false;
 }
-
-
-
-void drawX(SDL_Renderer* renderer, int x, int y, int size) {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-
-    // Draw the first diagonal line (from top-left to bottom-right)
-    SDL_RenderDrawLine(renderer, x - size, y - size, x + size, y + size);
-
-    // Draw the second diagonal line (from top-right to bottom-left)
-    SDL_RenderDrawLine(renderer, x + size, y - size, x - size, y + size);
-}
+*/
 
 
 
@@ -144,19 +156,58 @@ int main(int argc, char* args[])
                         }
                     
                         }
-                    int xbox = 117, xmin = 88;
-                    int ybox = 108, ymin = 109;
+                    
                     SDL_Rect box = { (xmin)+(j*xbox)  , (ymin) + (i * ybox), 50, 50};
                     if (prev == 'x')
                         SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
                     else
                         SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
                     
-                    if (checkWin(grid, prev)) {
+                    /*if (checkWin(grid, prev)) {
                         printf("Player %c wins!\n", prev);
                         
+                    }*/
+                    char value = prev;
+                    for (int p = 0; p < 3; ++p) {
+                        if ((grid[p][0] == value && grid[p][1] == value && grid[p][2] == value) ||
+                            (grid[0][p] == value && grid[1][p] == value && grid[2][p] == value)) {
+                            
+                        }
                     }
+                    // Check diagonals
+                    if ((grid[0][0] == value && grid[1][1] == value && grid[2][2] == value)) {
+                        
+                        /*SDL_Rect box1 = {(xmin)+(0 * xbox)  , (ymin)+(0 * ybox), 50, 50};
+                        SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+                        SDL_Rect box2 = { (xmin)+(1 * xbox)  , (ymin)+(1 * ybox), 50, 50 };
+                        SDL_FillRect(screenSurface, &box2, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+                        SDL_Rect box3 = { (xmin)+(2 * xbox)  , (ymin)+(2 * ybox), 50, 50 };
+                        SDL_FillRect(screenSurface, &box3, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));*/
                     }
+
+                    if (grid[0][2] == value && grid[1][1] == value && grid[2][0] == value) {
+                        /*SDL_Rect box1 = {(xmin)+(0 * xbox)  , (ymin)+(2 * ybox), 50, 50};
+                        SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+                        SDL_Rect box2 = { (xmin)+(1 * xbox)  , (ymin)+(1 * ybox), 50, 50 };
+                        SDL_FillRect(screenSurface, &box2, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
+
+                        SDL_Rect box3 = { (xmin)+(2 * xbox)  , (ymin)+(0 * ybox), 50, 50 };
+                        SDL_FillRect(screenSurface, &box3, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));*/
+
+                        //SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
+
+
+                        
+                    }
+
+
+
+
+                    }
+
 
 
 
