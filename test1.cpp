@@ -51,7 +51,7 @@ char prev = 'o';
 */
 bool winstat = false;
 
-
+int rdisp = 20, gdisp = 20;
 int main(int argc, char* args[])
 {
     char grid[3][3] = { {' ', ' ', ' '},  // Define a 3x3 grid with initial values
@@ -130,6 +130,16 @@ int main(int argc, char* args[])
 
                         }
                         winstat = false;
+                        if (prev == 'x') {
+                            SDL_Rect rmark = {rdisp, 20, 3,10  };
+                            SDL_FillRect(screenSurface, &rmark, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
+                            rdisp += 5;
+                        }
+                        if (prev == 'o') {
+                            SDL_Rect rmark = { gdisp, 40, 3,10 };
+                            SDL_FillRect(screenSurface, &rmark, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
+                            gdisp += 5;
+                        }
                     }
                 }
                 int num = 0;
