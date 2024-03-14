@@ -116,6 +116,22 @@ int main(int argc, char* args[])
                 //get window to stay up
                 SDL_Event e;
                 SDL_PollEvent(&e);
+                // resetting for restart
+
+                if (e.key.keysym.sym == 13) {
+
+                    if (winstat == true) {
+                        for (count1 = 0; count1 <= 2; count1++) {
+                            for (count2 = 0; count2 <= 2; count2++) {
+                                grid[count1][count2] = '/0';
+                                SDL_Rect box1 = { (xmin)+(count1 * xbox)  , (ymin)+(count2 * ybox), 50, 50 };
+                                SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0));
+                            }
+
+                        }
+                        winstat = false;
+                    }
+                }
                 int num = 0;
 
                 if (e.button.state == 1) {
