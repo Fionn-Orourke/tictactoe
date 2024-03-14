@@ -10,7 +10,7 @@ const int SCREEN_HEIGHT = 600;
 int xbox = 117, xmin = 88;
 int ybox = 108, ymin = 109;
 
-int box(int , int );
+int box(int, int);
 int i, j, count1, count2;
 char prev = 'o';
 
@@ -49,7 +49,7 @@ char prev = 'o';
     return false;
 }
 */
-
+bool winstat = false;
 
 
 int main(int argc, char* args[])
@@ -88,13 +88,13 @@ int main(int argc, char* args[])
 
 
             // Vertical lines
-            SDL_Rect line1 = { (SCREEN_WIDTH / 10)*3 , (SCREEN_HEIGHT / 6), 4, 300};
-            SDL_Rect line2 = { (SCREEN_WIDTH / 10)*5, (SCREEN_HEIGHT / 6), 4, 300};
+            SDL_Rect line1 = { (SCREEN_WIDTH / 10) * 3 , (SCREEN_HEIGHT / 6), 4, 300 };
+            SDL_Rect line2 = { (SCREEN_WIDTH / 10) * 5, (SCREEN_HEIGHT / 6), 4, 300 };
             SDL_FillRect(screenSurface, &line1, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line2, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
             // Horizontal lines
-            
+
             SDL_Rect line3 = { SCREEN_WIDTH / 6, (SCREEN_HEIGHT / 10) * 3, 300, 4 };
             SDL_Rect line4 = { SCREEN_WIDTH / 6, (SCREEN_HEIGHT / 10) * 5, 300, 4 };
             SDL_FillRect(screenSurface, &line3, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
@@ -113,13 +113,14 @@ int main(int argc, char* args[])
                             //Update the surface
                 SDL_UpdateWindowSurface(window);
 
-                            //get window to stay up
+                //get window to stay up
                 SDL_Event e;
                 SDL_PollEvent(&e);
                 int num = 0;
-                if (e.button.state == 1){
+
+                if (e.button.state == 1) {
                     Uint32 buttons = SDL_GetMouseState(&x, &y);
-                    
+
                     //printf_s("%i", box(x, y));
                     if (box(x, y) <= 3) {
                         i = 0;
@@ -127,56 +128,72 @@ int main(int argc, char* args[])
                     }
                     else if (box(x, y) <= 6) {
                         i = 1;
-                        j = box(x, y)-4;
+                        j = box(x, y) - 4;
                     }
                     else if (box(x, y) <= 9) {
                         i = 2;
-                        j = box(x, y) -7;
+                        j = box(x, y) - 7;
                     }
                     else
                         printf_s("incorrect input");
-                    
+
                     //printf_s("[%i][%i]", x, y);
                     if (grid[i][j] == 'x' || grid[i][j] == 'o')
                         printf_s("This place is already taken");
                     else {
-                        if (prev == 'o'){
+                        if (prev == 'o') {
                             grid[i][j] = 'x';
                             prev = 'x';
-                            }
+                        }
                         else {
                             grid[i][j] = 'o';
                             prev = 'o';
-                            }
+                        }
                         for (count1 = 0; count1 <= 2; count1++) {
                             for (count2 = 0; count2 <= 2; count2++) {
                                 printf_s("%c", grid[count1][count2]);
                             }
                             printf_s("\n");
                         }
-                    
-                        }
-                    
-                    SDL_Rect box = { (xmin)+(j*xbox)  , (ymin) + (i * ybox), 50, 50};
+
+                    }
+
+                    SDL_Rect box = { (xmin)+(j * xbox)  , (ymin)+(i * ybox), 50, 50 };
                     if (prev == 'x')
                         SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
                     else
                         SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
-                    
+
                     /*if (checkWin(grid, prev)) {
                         printf("Player %c wins!\n", prev);
-                        
+
                     }*/
                     char value = prev;
                     for (int p = 0; p < 3; ++p) {
-                        if ((grid[p][0] == value && grid[p][1] == value && grid[p][2] == value) ||
-                            (grid[0][p] == value && grid[1][p] == value && grid[2][p] == value)) {
-                            
+                        if (grid[p][0] == value && grid[p][1] == value && grid[p][2] == value) {
+                            grid[0][p] = 'w';
+                            grid[1][p] = 'w';
+                            grid[2][p] = 'w';
+                            winstat = true;
+
+
+                        }
+                        if (grid[0][p] == value && grid[1][p] == value && grid[2][p] == value) {
+                            grid[p][0] = 'w';
+                            grid[p][1] = 'w';
+                            grid[p][2] = 'w';
+                            winstat = true;
+
+
                         }
                     }
+
                     // Check diagonals
                     if ((grid[0][0] == value && grid[1][1] == value && grid[2][2] == value)) {
-                        
+                        grid[0][0] = 'w';
+                        grid[1][1] = 'w';
+                        grid[2][2] = 'w';
+                        winstat = true;
                         /*SDL_Rect box1 = {(xmin)+(0 * xbox)  , (ymin)+(0 * ybox), 50, 50};
                         SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
 
@@ -188,6 +205,10 @@ int main(int argc, char* args[])
                     }
 
                     if (grid[0][2] == value && grid[1][1] == value && grid[2][0] == value) {
+                        grid[0][2] = 'w';
+                        grid[1][1] = 'w';
+                        grid[2][0] = 'w';
+                        winstat = true;
                         /*SDL_Rect box1 = {(xmin)+(0 * xbox)  , (ymin)+(2 * ybox), 50, 50};
                         SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0xFF));
 
@@ -200,22 +221,34 @@ int main(int argc, char* args[])
                         //SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
 
 
-                        
+
+
+                    }
+                    if (winstat == true) {
+                        for (count1 = 0; count1 <= 2; count1++) {
+                            for (count2 = 0; count2 <= 2; count2++) {
+                                if (grid[count1][count2] != 'w') {
+                                    SDL_Rect box1 = { (xmin)+(count1 * xbox)  , (ymin)+(count2 * ybox), 50, 50 };
+                                    SDL_FillRect(screenSurface, &box1, SDL_MapRGB(screenSurface->format, 0, 0, 0));
+
+                                }
+                            }
+                        }
                     }
 
 
 
 
-                    }
+                }
 
 
 
 
-                
+
             }
             SDL_Event e; bool quit = false; while (quit == false) { while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) quit = true; } }
 
-            
+
         }
 
     }
@@ -242,7 +275,7 @@ int box(int col, int row) {
         result = 3;
     else
         result = 0;
-    
+
 
 
     //gets the specific ox and returns a value from 1 to each number reffering to a box
@@ -261,4 +294,3 @@ int box(int col, int row) {
 
     return result;
 }
-
