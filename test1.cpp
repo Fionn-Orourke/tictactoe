@@ -68,10 +68,6 @@ int main(int argc, char* args[])
             SDL_FillRect(screenSurface, &line3, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
             SDL_FillRect(screenSurface, &line4, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
 
-            //SDL_Renderer *renderer = SDL_CreateRenderer(window, SCREEN_WIDTH, SCREEN_HEIGHT);
-            //SDL_SetRenderDrawColor( renderer, 255, 0, 0, 255);
-            //SDL_RenderDrawLine( renderer, 8, 7, 6, 255);
-            //SDL_RenderPresent(renderer);
             printf_s("\nenter [1] to play against a bot, enter [2] to play 2 player: ");
             scanf_s("%i", &bot);
             while (true) {
@@ -82,13 +78,14 @@ int main(int argc, char* args[])
                             //Update the surface
                 SDL_UpdateWindowSurface(window);
 
-                //get window to stay up
+                
                 SDL_Event e;
                 SDL_PollEvent(&e);
-                // resetting for restart
+                
+                //detects when enter key is pressed
 
                 if (e.key.keysym.sym == 13) {
-
+                    //resets the grid
                     if (winstat == true) {
                         for (count1 = 0; count1 <= 2; count1++) {
                             for (count2 = 0; count2 <= 2; count2++) {
@@ -105,7 +102,7 @@ int main(int argc, char* args[])
                         else
                         {
 
-                        
+                            // puts win counter on the screen
                             if (prev == 'x') {
                                 SDL_Rect rmark = {rdisp, 20, 3,10  };
                                 SDL_FillRect(screenSurface, &rmark, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
@@ -121,18 +118,18 @@ int main(int argc, char* args[])
                 }
                 if (winstat == false){
                     int num = 0;
-
+                    //reads when window is clicked
                     if (e.button.state == 1) {
                         Uint32 buttons = SDL_GetMouseState(&x, &y);
 
-                        //printf_s("%i", box(x, y));
+                        
                         if (bot == 2 || prev == 'o') {
 
                             if (box(x, y) == 0)
                                 printf_s("incorrect input");
                             else
                             {
-
+                                // turns coordinates into locations on 3 by 3 grid
 
                                 if (box(x, y) <= 3) {
                                     i = 0;
@@ -150,15 +147,15 @@ int main(int argc, char* args[])
                                     printf_s("incorrect input");
                             }
                         }
-                        else //if(bot == 1 && prev == 'x')
+                        else 
                         {
                             int p, b;
                             int n, m;
-                            int rowx[3] = { 0 }; // Initialize arrays with zeros
+                            int rowx[3] = { 0 }; 
                             int colx[3] = { 0 };
                             int rowo[3] = { 0 };
                             int colo[3] = { 0 };
-
+                            // tells the bot how many spots on each row is taken up
                             for (n = 0; n < 3; n++) {
                                 for (m = 0; m < 3; m++) {
                                     if (grid[n][m] == 'x') {
@@ -172,10 +169,40 @@ int main(int argc, char* args[])
                                 }
                             }
 
-                            int choice[3] = { 0 }; // Initialize choice array with zeros
-                            choice[0] = 0; // Set initial maximum count to a negative value
+                            int choice[3] = { 0 };//[1 = columb. 2 = row]
+                            choice[0] = 0;
+                            int max = 0;
+                            for (int i = 0; i < 3; i++) {
+                                if (colo[i] > max){
+                                    max = colo[i];
+                                    choice[0] = 1;
+                                    choice[1] = i;
 
-                        
+                                }
+                                if (colx[i] > max) {
+                                    max = colx[i];
+                                    choice[0] = 1;
+                                    choice[1] = i;
+                                }
+                                    
+                                if (rowo[i] > max) {
+                                    max = rowo[i];
+                                    choice[0] = 2;
+                                    choice[1] = i;
+                                }
+                                    
+                                if (rowx[i] > max) {
+                                    max = rowx[i];
+                                    choice[0] = 2;
+                                    choice[1] = i;
+                                }
+                                    
+                            }
+                            
+
+                            
+
+                            // gives the bot the location of the first empty spot(bug fix)
                             for (count1 = 0; count1 <= 2; count1++) {
                                 for (count2 = 0; count2 <= 2; count2++) {
                                     if (grid[count1][count2] != 'x' && grid[count1][count2] != 'o') {
@@ -187,7 +214,7 @@ int main(int argc, char* args[])
                                 }
                             }
 
-
+                            // checks random locations untill one is found
                             for (count1 = 0; count1 <= 2; count1++) {
                                 srand(time(NULL));
                                 int randp = rand() % 3;
@@ -202,25 +229,14 @@ int main(int argc, char* args[])
                                 
                                 }
                             }
-                            /*while (true){
-                                srand(time(NULL));
-                                int randp = rand() % 0 + 2;
-                                srand(time(NULL));
-                                int randb = rand() % 0 + 2;
-                                if (grid[randp][randb] != 'x' && grid[randp][randb] != 'o') {
-                                    p = randp;
-                                    b = randb;
-                                    break;
-                                }
-
-                        
-                            }*/
-
-                            if (choice[1] == 1) {
+                            
+                            //filters to find open spot on row with highest value
+                            if (choice[0] == 1) {
                                 for (n = 0; n < 3; n++) {
-                                    if (grid[choice[2]][n] != 'x' && grid[choice[2]][n] != 'o') {
-                                        p = choice[2];
+                                    if (grid[choice[1]][n] != 'x' && grid[choice[1]][n] != 'o') {
+                                        p = choice[1];
                                         b = n;
+                                        printf_s("hhhhh");
                                      
                                     }
                                 
@@ -229,12 +245,13 @@ int main(int argc, char* args[])
                             
                             }
 
-                            else if (choice[1] == 2) 
+                            else if (choice[0] == 2) 
                             {
                                 for (n = 0; n < 3; n++) {
-                                    if (grid[n][choice[2]] != 'x' && grid[n][choice[2]] != 'o') {
-                                        b = choice[2];
+                                    if (grid[n][choice[1]] != 'x' && grid[n][choice[1]] != 'o') {
+                                        b = choice[1];
                                         p = n;
+                                        printf_s("hhhhh");
                                      
                                     }
                             
@@ -246,7 +263,7 @@ int main(int argc, char* args[])
                          i= p;
                          j = b;
                         }
-                     
+                        //places players choice in the array
                         printf_s("[%i][%i]", i, j);
                         if (grid[i][j] == 'x' || grid[i][j] == 'o') {
 
@@ -269,17 +286,14 @@ int main(int argc, char* args[])
                             }
 
 
-
+                            // displays players choice
                             SDL_Rect box = { (xmin)+(j * xbox)  , (ymin)+(i * ybox), 50, 50 };
                             if (prev == 'x')
                                 SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0xFF, 0, 0));
                             else
                                 SDL_FillRect(screenSurface, &box, SDL_MapRGB(screenSurface->format, 0, 0xFF, 0));
 
-                            /*if (checkWin(grid, prev)) {
-                                printf("Player %c wins!\n", prev);
-
-                            }*/
+                            // places w in the row of the winning line
                             char value = prev;
                             for (int p = 0; p < 3; ++p) {
                                 if (grid[p][0] == value && grid[p][1] == value && grid[p][2] == value) {
@@ -299,7 +313,7 @@ int main(int argc, char* args[])
 
                                 }
                             }
-
+                            // checks for winners
                             // Check diagonals
                             if ((grid[0][0] == value && grid[1][1] == value && grid[2][2] == value)) {
                                 grid[0][0] = 'w';
@@ -318,6 +332,7 @@ int main(int argc, char* args[])
 
 
                             }
+                            // counts spots taken
                             if (winstat == false) {
                                 int cn = 0;
                                 for (count1 = 0; count1 <= 2; count1++) {
@@ -326,13 +341,14 @@ int main(int argc, char* args[])
                                             cn += 1;
                                         }
                                     }
-                                }
+                                }// if all spots are taken and there is no winner 
                                 if (cn == 9) {
                                     winstat = true;
                                     draw = true;
                                 }
 
                             }
+                            // all locations that arent in the winning line are reset
                             if (winstat == true) {
                                 for (count1 = 0; count1 <= 2; count1++) {
                                     for (count2 = 0; count2 <= 2; count2++) {
